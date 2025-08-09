@@ -1,0 +1,759 @@
+@import "tailwindcss";
+
+:root {
+  /* Aurora Glass UI 2025 Design Tokens */
+  --background-color: #0A0B0F;
+  --background-secondary: #11122A;
+  --background-tertiary: #1B0B33;
+  
+  /* Accent Colors */
+  --accent-cyan: #00E6FF;
+  --accent-purple: #7A00FF;
+  --accent-magenta: #FF2E93;
+  
+  /* Text Colors Hierarchy - Aurora Glass UI */
+  --text-hero-color: #FFFFFF;
+  --text-hero-glow: 0 0 40px rgba(0, 230, 255, 0.5);
+  --text-subtitle-color: #00E6FF;
+  --text-subtitle-alt: #FF2E93;
+  --text-body-color: #E8EAF0;
+  --text-muted: #A9B0C0;
+  --text-cta: #FFFFFF;
+  --text-link: #00E6FF;
+  --text-link-hover: #7A00FF;
+  --text-success: #2EE6A6;
+  --text-warning: #FFBE0B;
+  --text-error: #FF2E93;
+  
+  /* Legacy support */
+  --button-color: #00E6FF;
+  --button-hover: #7A00FF;
+  
+  /* Aurora Gradient */
+  --aurora-gradient: linear-gradient(135deg, #0A0B0F 0%, #11122A 40%, #1B0B33 70%, #0A0B0F 100%);
+  --aurora-glow: linear-gradient(135deg, rgba(0, 230, 255, 0.3) 0%, rgba(122, 0, 255, 0.3) 50%, rgba(255, 46, 147, 0.3) 100%);
+  
+  /* Glass Morphism - Enhanced for 47" Brand Impact */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-blur: blur(20px) saturate(130%);
+  
+  /* Gradients */
+  --conic-gradient: conic-gradient(from 0deg at 50% 50%, #00E6FF 0deg, #7A00FF 120deg, #FF2E93 240deg, #00E6FF 360deg);
+  --radial-glow: radial-gradient(circle at 50% 50%, rgba(0, 230, 255, 0.4) 0%, transparent 70%);
+  
+  /* Shadows */
+  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.15);
+  --shadow-glow-cyan: 0 0 32px rgba(0, 230, 255, 0.3);
+  --shadow-glow-magenta: 0 0 32px rgba(255, 46, 147, 0.3);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* css-ignore-next-line */
+/* stylelint-disable-next-line at-rule-no-unknown */
+@theme {
+  /* Typography Scale 9:16 - Aurora Glass UI */
+  --text-hero: 6.5rem;
+  --text-hero--line-height: 0.9;
+  --text-title: 3.5rem;
+  --text-title--line-height: 1.1;
+  --text-subtitle: 1.5rem;
+  --text-subtitle--line-height: 1.4;
+  --text-body: 1.125rem;
+  --text-body--line-height: 1.6;
+  
+  /* Motion System */
+  --motion-micro: 180ms;
+  --motion-screen: 300ms;
+  --motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  
+  /* Legacy support */
+  --text-title-sm: 3.5rem;
+  --text-title-sm--line-height: 1.1;
+  --text-title-lg: 6.5rem;
+  --text-title-lg--line-height: 0.9;
+  
+  /* Enhanced Animations */
+  --animate-flash: flash 300ms ease-out forwards;
+  --animate-aurora: aurora 4s ease-in-out infinite alternate;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+  --animate-pulse-glow: pulse-glow 1.5s ease-in-out infinite;
+  
+  @keyframes flash {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  @keyframes aurora {
+    0% { transform: translateX(-20px) translateY(-10px) scale(1); opacity: 0.7; }
+    100% { transform: translateX(20px) translateY(10px) scale(1.1); opacity: 0.4; }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(180deg); }
+  }
+  
+  @keyframes glow {
+    0% { box-shadow: var(--shadow-glow-cyan); }
+    100% { box-shadow: var(--shadow-glow-magenta); }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 230, 255, 0.4), 0 0 40px rgba(0, 230, 255, 0.2); }
+    50% { box-shadow: 0 0 30px rgba(122, 0, 255, 0.6), 0 0 60px rgba(122, 0, 255, 0.3); }
+  }
+}
+
+/* Fuentes con fallbacks y optimización */
+@font-face {
+  font-family: 'Futura Std';
+  src: url('/fonts/FUTURASTD-BOLD.OTF') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futura Std';
+  src: url('/fonts/FUTURASTD-HEAVY.OTF') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futura Std';
+  src: url('/fonts/FUTURASTD-MEDIUM.OTF') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  color: var(--text-body-color);
+  font-family: 'Futura Std', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: var(--background-color);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Aurora Glass UI Global Styles */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--aurora-gradient);
+  z-index: -2;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(0, 230, 255, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255, 46, 147, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(122, 0, 255, 0.1) 0%, transparent 60%);
+  animation: var(--animate-aurora);
+  z-index: -1;
+}
+
+/* Soporte para pantalla vertical 9:16 - TOTEM Optimizado */
+@media (min-aspect-ratio: 9/16) {
+  /* Utilidades para layouts 9:16 */
+  .aspect-9-16 {
+    aspect-ratio: 9/16;
+  }
+  
+  .h-screen-safe {
+    height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  }
+  
+  /* Optimizaciones para pantallas verticales grandes */
+  .text-totem-hero {
+    font-size: clamp(4rem, 8vw, 7rem);
+    line-height: 0.85;
+  }
+  
+  .text-totem-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.1;
+  }
+  
+  .text-totem-subtitle {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    line-height: 1.3;
+  }
+  
+  .text-totem-body {
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    line-height: 1.5;
+  }
+  
+  /* Botones optimizados para touch en totem */
+  .btn-totem {
+    min-height: 80px;
+    min-width: 200px;
+    font-size: clamp(1.25rem, 2.5vw, 2rem);
+    padding: 1.25rem 2rem;
+  }
+  
+  /* Containers para 2:3 centrados en 9:16 */
+  .container-2-3 {
+    width: 80%;
+    max-width: 675px;
+    aspect-ratio: 2/3;
+  }
+  
+  /* Glass effects mejorados para totem */
+  .glass-totem {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px) saturate(130%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1.5rem;
+  }
+  
+  /* Zones para layout 9:16 estructurado */
+  .zone-header { height: 15%; }
+  .zone-main { height: 60%; }
+  .zone-controls { height: 18%; }
+  .zone-footer { height: 7%; }
+}
+
+/* Partículas optimizadas para totem vertical */
+.particles-totem {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Efectos de glow específicos para totem */
+.glow-cyan-totem {
+  box-shadow: 
+    0 0 20px rgba(0, 230, 255, 0.4),
+    0 0 40px rgba(0, 230, 255, 0.2),
+    inset 0 0 30px rgba(0, 230, 255, 0.1);
+}
+
+.glow-purple-totem {
+  box-shadow: 
+    0 0 20px rgba(122, 0, 255, 0.4),
+    0 0 40px rgba(122, 0, 255, 0.2),
+    inset 0 0 30px rgba(122, 0, 255, 0.1);
+}
+
+.glow-gold-totem {
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.4),
+    0 0 40px rgba(255, 215, 0, 0.2),
+    inset 0 0 30px rgba(255, 215, 0, 0.1);
+}
+
+/* Animations específicas para totem */
+@keyframes pulse-glow-totem {
+  0%, 100% { 
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+.animate-pulse-glow-totem {
+  animation: pulse-glow-totem 2s ease-in-out infinite;
+}
+.vertical-screen {
+  aspect-ratio: 9/16;
+  max-height: 100vh;
+  max-width: calc(100vh * 9/16);
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .vertical-screen {
+    max-width: 100vw;
+    max-height: calc(100vw * 16/9);
+  }
+}
+
+/* Aurora Glass UI Typography Classes */
+.text-hero {
+  font-size: var(--text-hero);
+  line-height: var(--text-hero--line-height);
+  font-weight: 800;
+  color: var(--text-hero-color);
+  text-shadow: var(--text-hero-glow);
+}
+
+.text-hero-gradient {
+  font-size: var(--text-hero);
+  line-height: var(--text-hero--line-height);
+  font-weight: 800;
+  background: var(--conic-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: var(--text-hero-glow);
+}
+
+.text-title {
+  font-size: var(--text-title);
+  line-height: var(--text-title--line-height);
+  font-weight: 700;
+  color: var(--text-subtitle-color);
+}
+
+.text-subtitle {
+  font-size: var(--text-subtitle);
+  line-height: var(--text-subtitle--line-height);
+  font-weight: 500;
+  color: var(--text-body-color);
+}
+
+.text-subtitle-alt {
+  font-size: var(--text-subtitle);
+  line-height: var(--text-subtitle--line-height);
+  font-weight: 500;
+  color: var(--text-subtitle-alt);
+}
+
+.text-body {
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  font-weight: 400;
+  color: var(--text-body-color);
+}
+
+.text-muted {
+  color: var(--text-muted);
+  font-size: var(--text-body);
+}
+
+.text-subtitle-color {
+  color: var(--text-subtitle-color);
+}
+
+/* Text glow utilities */
+.text-glow-cyan {
+  text-shadow: var(--shadow-glow-cyan);
+}
+
+.text-glow-magenta {
+  text-shadow: var(--shadow-glow-magenta);
+}
+
+/* Countdown number - special large text */
+.text-countdown {
+  font-size: clamp(120px, 15vw, 200px);
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, #00E6FF, #7A00FF);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 40px rgba(0, 230, 255, 0.6));
+}
+
+/* Legacy support */
+.text-title-sm {
+  font-size: var(--text-title-sm);
+  line-height: var(--text-title-sm--line-height);
+  color: var(--text-subtitle-color);
+}
+
+.text-title-lg {
+  font-size: var(--text-title-lg);
+  line-height: var(--text-title-lg--line-height);
+  color: var(--text-hero-color);
+}
+
+/* Glass Morphism Utilities - Enhanced for 47" TOTEM */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-glass);
+  transition: all 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.glass:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 
+    var(--shadow-glass),
+    0 12px 48px rgba(0, 0, 0, 0.3),
+    0 0 24px rgba(0, 230, 255, 0.1);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: var(--shadow-glass);
+  transition: all 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 
+    var(--shadow-glass),
+    0 16px 64px rgba(0, 0, 0, 0.35),
+    0 0 32px rgba(122, 0, 255, 0.15);
+}
+
+/* 60fps Motion Optimization for TOTEM */
+.will-change-transform {
+  will-change: transform, opacity;
+}
+
+.gpu-accelerated {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* High-performance animation base class */
+.smooth-animation {
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Optimized transitions for brand quality */
+.premium-transition {
+  transition: all 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform, opacity, box-shadow;
+}
+
+/* Aurora Glass UI Global Effects */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Noise Overlay for Visual Texture */
+.noise-overlay::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.08;
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,.15) 1px, transparent 0);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 1;
+  animation: noise 8s linear infinite;
+}
+
+@keyframes noise {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -5%); }
+  20% { transform: translate(-10%, 5%); }
+  30% { transform: translate(5%, -10%); }
+  40% { transform: translate(-5%, 15%); }
+  50% { transform: translate(-10%, 5%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(-15%, 10%); }
+  90% { transform: translate(10%, 5%); }
+}
+
+/* Enhanced Touch Interactions for 47" TOTEM */
+button, a, [role="button"] {
+  transition: all var(--motion-micro) var(--motion-ease);
+  color: var(--text-cta);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Touch/Hover States */
+button:hover, a:hover, [role="button"]:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 24px rgba(0, 230, 255, 0.2);
+}
+
+/* Active/Touch Press State */
+button:active, a:active, [role="button"]:active {
+  transform: translateY(0px) scale(0.98);
+  transition: all 100ms ease-out;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    inset 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Ripple effect for touch feedback */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.touch-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.touch-ripple::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  animation: ripple 600ms ease-out;
+}
+
+/* Enhanced Focus States */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 4px rgba(0, 230, 255, 0.2);
+}
+
+/* Glass Blur Optimization */
+.glass,
+.glass-card,
+[class*="glass"] {
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+/* Loading States */
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+.loading-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background-size: 200px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Accessibility & Performance */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  body::before,
+  body::after {
+    animation: none !important;
+  }
+  
+  .glass,
+  .glass-card {
+    will-change: auto;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --text-hero-color: #FFFFFF;
+    --text-subtitle-color: #00E6FF;
+    --text-body-color: #FFFFFF;
+  }
+  
+  .text-hero,
+  [class*="text-hero"] {
+    background: white !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  body::before,
+  body::after,
+  .particle-layer,
+  [class*="particle"],
+  [class*="glow"],
+  [class*="blur"] {
+    display: none !important;
+  }
+  
+  .glass,
+  .glass-card {
+    background: white !important;
+    backdrop-filter: none !important;
+    border: 1px solid #ccc !important;
+  }
+}
+
+/* Utilidades de accesibilidad */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus visible para mejor accesibilidad */
+:focus-visible {
+  outline: 3px solid var(--accent-cyan);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip link para navegación rápida */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--accent-cyan);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 100;
+  border-radius: 0 0 8px 0;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Tipografía Responsiva */
+@media (max-width: 640px) {
+  :root {
+    --text-hero: 4rem;
+    --text-title: 2.5rem;
+    --text-subtitle: 1.2rem;
+    --text-title-lg: 4rem;
+    --text-title-sm: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --text-hero: 3rem;
+    --text-title: 2rem;
+    --text-subtitle: 1rem;
+    --text-title-lg: 3rem;
+    --text-title-sm: 2rem;
+  }
+  
+  /* Ajustar padding de botones en móviles pequeños */
+  button {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+}
+
+/* Mejoras de animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Focus trap helper */
+.focus-trap {
+  position: relative;
+}
+
+.focus-trap:focus-within {
+  z-index: 9999;
+}
+
+/* Link styles */
+a {
+  color: var(--text-link);
+  text-decoration: none;
+  transition: color var(--motion-micro) var(--motion-ease);
+}
+
+a:hover {
+  color: var(--text-link-hover);
+}
+
+/* Success/Warning/Error text colors */
+.text-success {
+  color: var(--text-success);
+}
+
+.text-warning {
+  color: var(--text-warning);
+}
+
+.text-error {
+  color: var(--text-error);
+}
+
+/* Utility classes for consistency */
+.text-primary {
+  color: var(--text-hero-color);
+}
+
+.text-secondary {
+  color: var(--text-body-color);
+}
+
+.text-accent {
+  color: var(--text-subtitle-color);
+}
+
+.text-glass {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.text-glass-muted {
+  color: rgba(255, 255, 255, 0.7);
+}
