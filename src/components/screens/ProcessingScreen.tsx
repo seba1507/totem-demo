@@ -147,12 +147,7 @@ export default function ProcessingScreen({
         
         let compressedImageUrl = imageUrl;
         try {
-          compressedImageUrl = await compressImage(imageUrl, {
-            maxWidth: 1024,
-            maxHeight: 1536,
-            quality: 0.9,
-            format: 'jpeg'
-          });
+          compressedImageUrl = await compressImage(imageUrl, 1024, 1536, 0.9);
           console.log('Imagen comprimida exitosamente');
           setProcessingProgress(15);
         } catch (compressionError) {
