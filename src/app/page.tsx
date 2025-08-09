@@ -28,7 +28,8 @@ export default function Home() {
   // Estados para guardar datos de la aplicación
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [processedImageUrl, setProcessedImageUrl] = useState<string | null>(null);
-  const [blobUrl, setBlobUrl] = useState<string | null>(null);
+  const [s3Url, setS3Url] = useState<string | null>(null);
+  const [s3Key, setS3Key] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [currentRequestId, setCurrentRequestId] = useState<string | null>(null);
@@ -61,7 +62,8 @@ export default function Home() {
     console.log("Reiniciando aplicación");
     setCapturedImage(null);
     setProcessedImageUrl(null);
-    setBlobUrl(null);
+    setS3Url(null);
+    setS3Key(null);
     setFileName(null);
     setErrorMessage(null);
     setCurrentRequestId(null);
@@ -93,20 +95,23 @@ export default function Home() {
     
     // Limpiar la imagen procesada anterior
     setProcessedImageUrl(null);
-    setBlobUrl(null);
+    setS3Url(null);
+    setS3Key(null);
     setFileName(null);
     
     navigateTo('processing', true);
   }, [navigateTo]);
 
   // Función para manejar el resultado del procesamiento
-  const handleProcessingComplete = useCallback((imageUrl: string, blobUrlParam?: string, fileNameParam?: string) => {
+  const handleProcessingComplete = useCallback((imageUrl: string, s3UrlParam?: string, s3KeyParam?: string, fileNameParam?: string) => {
     console.log("Procesamiento completado, URL de imagen procesada:", imageUrl);
-    console.log("URL de Blob:", blobUrlParam);
+    console.log("S3 URL:", s3UrlParam);
+    console.log("S3 Key:", s3KeyParam);
     
     // Actualizar primero el estado de la imagen procesada
     setProcessedImageUrl(imageUrl);
-    setBlobUrl(blobUrlParam || null);
+    setS3Url(s3UrlParam || null);
+    setS3Key(s3KeyParam || null);
     setFileName(fileNameParam || null);
     
     // Esperar brevemente para que React actualice el estado
@@ -208,7 +213,8 @@ export default function Home() {
           {currentState === 'result' && (
             <ResultScreen
               processedImageUrl={processedImageUrl}
-              blobUrl={blobUrl}
+              s3Url={s3Url}
+              s3Key={s3Key}
               fileName={fileName}
               onReset={handleReset}
             />

@@ -9,7 +9,7 @@ import { compressImage } from '@/utils/imageCompression';
 interface ProcessingScreenProps {
   imageUrl: string | null;
   requestId: string | null;
-  onProcessingComplete: (imageUrl: string, blobUrl?: string, fileName?: string) => void;
+  onProcessingComplete: (imageUrl: string, s3Url?: string, s3Key?: string, fileName?: string) => void;
   onProcessingError: (error: string) => void;
   brandVideoUrl?: string;
   welcomeMessage?: string;
@@ -209,15 +209,18 @@ export default function ProcessingScreen({
           setProcessingProgress(100);
           
           const processedImageUrl = data.imageUrl;
-          const blobUrl = data.blobUrl;
+          const s3Url = data.s3Url;
+          const s3Key = data.s3Key;
           const fileName = data.fileName;
           console.log("URL de imagen procesada:", processedImageUrl);
+          console.log("S3 URL:", s3Url);
+          console.log("S3 Key:", s3Key);
           
           isCompletedRef.current = true;
           
           setTimeout(() => {
             if (isMounted) {
-              onProcessingComplete(processedImageUrl, blobUrl, fileName);
+              onProcessingComplete(processedImageUrl, s3Url, s3Key, fileName);
             }
           }, 500);
           

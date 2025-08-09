@@ -5,12 +5,13 @@ import ParticleLayer, { useParticleLayer } from '@/components/effects/ParticleLa
 
 interface ResultScreenProps {
   processedImageUrl: string | null;
-  blobUrl?: string | null;
+  s3Url?: string | null;
+  s3Key?: string | null;
   fileName?: string | null;
   onReset: () => void;
 }
 
-export default function ResultScreen({ processedImageUrl, blobUrl, fileName, onReset }: ResultScreenProps) {
+export default function ResultScreen({ processedImageUrl, s3Url, s3Key, fileName, onReset }: ResultScreenProps) {
   const [timeRemaining, setTimeRemaining] = useState(30);
   const [isPaused, setIsPaused] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(true);
@@ -42,17 +43,24 @@ export default function ResultScreen({ processedImageUrl, blobUrl, fileName, onR
     if (fileName) {
       const baseUrl = window.location.origin;
       
-      if (blobUrl) {
-        const downloadEndpoint = `${baseUrl}/api/download?url=${encodeURIComponent(blobUrl)}&name=${encodeURIComponent(fileName)}`;
+      if (s3Key) {
+        // Usar S3 key para generar URL firmada de descarga
+        const downloadEndpoint = `${baseUrl}/api/download?s3Key=${encodeURIComponent(s3Key)}&name=${encodeURIComponent(fileName)}`;
         setDownloadUrl(downloadEndpoint);
-        console.log('URL de descarga generada (Blob):', downloadEndpoint);
+        console.log('URL de descarga generada (S3 Key):', downloadEndpoint);
+      } else if (s3Url) {
+        // Fallback a URL directa de S3
+        const downloadEndpoint = `${baseUrl}/api/download?url=${encodeURIComponent(s3Url)}&name=${encodeURIComponent(fileName)}`;
+        setDownloadUrl(downloadEndpoint);
+        console.log('URL de descarga generada (S3 URL):', downloadEndpoint);
       } else if (processedImageUrl) {
+        // Fallback final a data URL
         const downloadEndpoint = `${baseUrl}/api/download?url=${encodeURIComponent(processedImageUrl)}&name=${encodeURIComponent(fileName)}`;
         setDownloadUrl(downloadEndpoint);
         console.log('URL de descarga generada (Data URL):', downloadEndpoint);
       }
     }
-  }, [blobUrl, fileName, processedImageUrl]);
+  }, [s3Url, s3Key, fileName, processedImageUrl]);
 
   // Manejar carga de imagen
   const handleImageLoad = () => {

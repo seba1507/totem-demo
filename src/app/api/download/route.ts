@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { generateDownloadUrl, validateS3Config } from '@/utils/s3Storage';
 
 // Security configuration
 const ALLOWED_DOMAINS = [
   'blob.vercel-storage.com',
+  // S3 domains will be validated dynamically
 ];
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_CONTENT_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -24,11 +26,16 @@ function isValidUrl(url: string): boolean {
       return false;
     }
     
-    // For HTTPS URLs, check domain whitelist
+    // For HTTPS URLs, check domain whitelist and S3 domains
     if (parsed.protocol === 'https:') {
+      // Allow S3 domains if configured
+      const s3BucketName = process.env.AWS_S3_BUCKET_NAME;
+      const awsRegion = process.env.AWS_REGION || 'us-east-1';
+      const s3Domain = `${s3BucketName}.s3.${awsRegion}.amazonaws.com`;
+      
       return ALLOWED_DOMAINS.some(domain => 
         parsed.hostname === domain || parsed.hostname.endsWith('.' + domain)
-      );
+      ) || parsed.hostname === s3Domain;
     }
     
     // For data URLs, validate format
@@ -46,11 +53,27 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const imageUrl = searchParams.get('url');
+    const s3Key = searchParams.get('s3Key');
     const fileName = searchParams.get('name') || 'tu_futuro.jpg';
 
-    // Enhanced validation
+    // Si tenemos S3 key, generar URL firmada para descarga
+    if (s3Key && validateS3Config()) {
+      try {
+        const signedUrl = await generateDownloadUrl(s3Key, fileName);
+        
+        // Redireccionar a la URL firmada de S3
+        return NextResponse.redirect(signedUrl);
+      } catch (error) {
+        console.error('Error al generar URL firmada de S3:', error);
+        return NextResponse.json({ 
+          error: 'Error al generar enlace de descarga' 
+        }, { status: 500 });
+      }
+    }
+
+    // Enhanced validation for regular URLs
     if (!imageUrl) {
-      return NextResponse.json({ error: 'URL no proporcionada' }, { status: 400 });
+      return NextResponse.json({ error: 'URL o S3 key no proporcionada' }, { status: 400 });
     }
 
     // Validate URL against whitelist

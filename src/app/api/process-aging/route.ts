@@ -1,7 +1,7 @@
 // app/api/process-aging/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { format } from 'date-fns';
-import { put } from '@vercel/blob';
+import { uploadImageToS3, validateS3Config } from '@/utils/s3Storage';
 
 // Configuración de OpenAI
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -165,34 +165,33 @@ export async function POST(request: NextRequest) {
       const base64Image = Buffer.from(imageBuffer).toString('base64');
       const dataUrl = `data:image/jpeg;base64,${base64Image}`;
       
-      let blobUrl: string | null = null;
+      let s3Url: string | null = null;
+      let s3Key: string | null = null;
       
-      // Intentar subir a Vercel Blob si está disponible
-      if (process.env.BLOB_READ_WRITE_TOKEN) {
+      // Intentar subir a S3 si está configurado
+      if (validateS3Config()) {
         try {
-          console.log('Subiendo imagen a Vercel Blob...');
-          const blob = await put(fileName, imageBuffer, {
-            access: 'public',
-            contentType: 'image/jpeg',
-            token: process.env.BLOB_READ_WRITE_TOKEN,
-          });
+          console.log('Subiendo imagen a S3...');
+          const s3Result = await uploadImageToS3(imageBuffer, fileName, 'image/jpeg');
           
-          blobUrl = blob.url;
-          console.log('Imagen subida a Vercel Blob:', blobUrl);
-        } catch (blobError) {
-          console.error('Error al subir a Vercel Blob:', blobError);
-          console.log('Continuando sin Vercel Blob, usando data URL para descarga');
+          s3Url = s3Result.url;
+          s3Key = s3Result.key;
+          console.log('Imagen subida a S3:', s3Url);
+        } catch (s3Error) {
+          console.error('Error al subir a S3:', s3Error);
+          console.log('Continuando sin S3, usando data URL para descarga');
         }
       } else {
-        console.log('BLOB_READ_WRITE_TOKEN no configurado, usando data URL para descarga');
+        console.log('S3 no configurado, usando data URL para descarga');
       }
       
       console.log('Imagen procesada lista para enviar al frontend');
       
-      // Preparar resultado con o sin URL de Blob
+      // Preparar resultado con URL de S3
       const result = {
         imageUrl: dataUrl, // Para mostrar en pantalla
-        blobUrl: blobUrl, // URL de Vercel Blob para QR (puede ser null)
+        s3Url: s3Url, // URL de S3 para acceso público (puede ser null)
+        s3Key: s3Key, // Key de S3 para generar URLs de descarga
         fileName: fileName,
         timestamp: timestamp
       };
