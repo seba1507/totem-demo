@@ -45,7 +45,7 @@ export default function ReviewScreen({ imageUrl, onAccept, onRetake }: ReviewScr
         {/* Header Zone (12% de altura) */}
         <div className="h-[12%] flex items-center justify-center relative z-20">
           <h1 
-            className="text-5xl lg:text-6xl font-bold text-white text-center" 
+            className="text-6xl lg:text-7xl font-bold text-white text-center" 
             style={{ 
               fontFamily: 'Futura Std',
               textShadow: 'var(--text-hero-glow)'
